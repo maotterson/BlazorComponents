@@ -1,7 +1,8 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace BlazorComponents.WASM.Data.Models;
-
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum MuscleGroup
 {
     [EnumMember(Value = "pectorals")]
