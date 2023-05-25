@@ -5,6 +5,7 @@
 
 <input @bind="@_search" type="text" @oninput="SearchChanged" />
 <h6>results for @_search</h6>
+
 <ul>
     @foreach (var ex in _filtered)
     {
@@ -17,8 +18,8 @@
 
 @code {
     private List<Exercise> _allExercises => _exerciseService.Exercises;
-    private static List<Exercise> emptyList = new List<Exercise>();
-    private List<Exercise> _filtered = emptyList;
+    private static List<Exercise> EMPTY_LIST = new List<Exercise>();
+    private List<Exercise> _filtered = EMPTY_LIST;
     private string _search = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -29,8 +30,9 @@
     private void SearchChanged(ChangeEventArgs args)
     {
         _search = args!.Value!.ToString()!;
-        if (string.IsNullOrEmpty(_search)) _filtered = emptyList;
-        _filtered = _allExercises.Where(e => e.Name.Contains(_search)).ToList();
+
+        _filtered = string.IsNullOrEmpty(_search) ? 
+            EMPTY_LIST : _allExercises.Where(e => e.Name.Contains(_search)).ToList();
         StateHasChanged();
     }
 }
