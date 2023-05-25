@@ -10,7 +10,19 @@
     @foreach (var ex in _filtered)
     {
         <li>
-            @ex.Name @ex.MuscleGroups.Count
+            @ex.Key.Name @ex.Value.Item1 - @ex.Value.Item2
+            @for(var i=0; i<ex.Key.Name.Length; i++)
+            {
+                if(i >= ex.Value.Item1 && i < ex.Value.Item2)
+                {
+                    <b>@ex.Key.Name[i]</b>
+                }
+                else
+                {
+                    @ex.Key.Name[i]
+                }
+            }
+            @ex.Key.MuscleGroups.Count
         </li>
     }
 </ul>
@@ -18,8 +30,8 @@
 
 @code {
     private List<Exercise> _allExercises => _exerciseService.Exercises;
-    private static List<Exercise> EMPTY_LIST = new List<Exercise>();
-    private List<Exercise> _filtered = EMPTY_LIST;
+    private static Dictionary<Exercise, (int, int)> EMPTY_SEARCH_TABLE = new Dictionary<Exercise, (int, int)>();
+    private Dictionary<Exercise, (int, int)> _filtered = EMPTY_SEARCH_TABLE;
     private string _search = string.Empty;
     private int _numMatches = 0;
 
@@ -34,7 +46,7 @@
 
         if (string.IsNullOrEmpty(_search))
         {
-            _filtered = EMPTY_LIST;
+            _filtered = EMPTY_SEARCH_TABLE;
             _numMatches = 0;
             StateHasChanged();
             return;
@@ -44,7 +56,12 @@
                 .Where(e => e.Name.Contains(_search));
 
         _numMatches = filteredEnumerable.Count();
-        _filtered = filteredEnumerable.Take(10).ToList();
+
+        var filteredBegins = filteredEnumerable.Where(e => e.Name.StartsWith(_search)).OrderBy(e => e.Name);
+        var filteredNotBegins = filteredEnumerable.Where(e => !e.Name.StartsWith(_search)).OrderBy(e => e.Name);
+        var filteredOrdered = filteredBegins.Concat(filteredNotBegins).Take(10);
+
+        filteredOrdered.ToDictionary(e => e.Name, e => (e.Name.IndexOf(_search), e.Name.IndexOf(_search) + _search.Length));
 
         StateHasChanged();
     }
