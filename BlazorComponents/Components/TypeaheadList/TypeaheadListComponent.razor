@@ -1,13 +1,11 @@
-﻿<h3>TypeaheadListComponent</h3>
+﻿@using BlazorComponents.WASM.Data.Models;
+@using BlazorComponents.WASM.Data.Static;
+@inject ExerciseService _exerciseService;
+<h3>TypeaheadListComponent</h3>
 
 @code {
-    private List<ExerciseDto> exerciseDtos { get; set; } = new List<ExerciseDto>()
+    private List<Exercise> exercises => _
     {
 
     };
 
-    private class ExerciseDto
-    {
-        string Name { get; set; }
-
-    }
