@@ -7,49 +7,58 @@ using System.Text;
 
 namespace BlazorComponents.WASM.Data.Json;
 
-public class MuscleGroupJsonConverter : JsonConverter<MuscleGroup>
+public class MuscleGroupJsonConverter : JsonConverter<List<MuscleGroup>>
 {
-    public override MuscleGroup Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    
+    public override List<MuscleGroup> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string value = reader.GetString()!;
-        value = ConvertToPascalCase(value)!;
-        return Enum.Parse<MuscleGroup>(value, true);
+        string value = reader.GetString();
+        List<MuscleGroup> muscleGroups = ConvertToMuscleGroups(value);
+        return muscleGroups;
     }
 
-    public override void Write(Utf8JsonWriter writer, MuscleGroup value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, List<MuscleGroup> value, JsonSerializerOptions options)
     {
-        string jsonValue = ConvertToLowercaseHyphenated(value.ToString());
-
+        string jsonValue = ConvertToLowerCaseHyphenated(value);
         writer.WriteStringValue(jsonValue);
     }
+
+    private List<MuscleGroup> ConvertToMuscleGroups(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return new List<MuscleGroup>();
+        }
+
+        List<string> muscleGroupValues = value.Split('-').ToList();
+        List<MuscleGroup> muscleGroups = muscleGroupValues
+            .Select(ConvertToPascalCase)
+            .Select(Enum.Parse<MuscleGroup>)
+            .ToList();
+
+        return muscleGroups;
+    }
+
     private string ConvertToPascalCase(string value)
     {
-        TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
         value = value.Replace("-", " ");
-        value = textInfo.ToTitleCase(value).Replace(" ", "");
+        value = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value);
+        value = value.Replace(" ", "");
         return value;
     }
 
-    private string ConvertToLowercaseHyphenated(string value)
+    private string ConvertToLowerCaseHyphenated(List<MuscleGroup> muscleGroups)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        List<string> convertedValues = muscleGroups
+            .Select(muscleGroup => ConvertToLowerCaseHyphenated(muscleGroup.ToString()))
+            .ToList();
 
-        for (int i = 0; i < value.Length; i++)
-        {
-            if (char.IsUpper(value[i]))
-            {
-                if (i > 0)
-                {
-                    stringBuilder.Append("-");
-                }
-                stringBuilder.Append(char.ToLower(value[i]));
-            }
-            else
-            {
-                stringBuilder.Append(value[i]);
-            }
-        }
+        return string.Join("-", convertedValues);
+    }
 
-        return stringBuilder.ToString();
+    private string ConvertToLowerCaseHyphenated(string value)
+    {
+        value = string.Concat(value.Select((x, i) => i > 0 && char.IsUpper(x) ? "-" + x.ToString() : x.ToString())).ToLower();
+        return value;
     }
 }
