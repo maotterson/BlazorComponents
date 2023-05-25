@@ -1,5 +1,13 @@
 ﻿<h3>TypeaheadListComponent</h3>
 
 @code {
+    private List<ExerciseDto> exerciseDtos { get; set; } = new List<ExerciseDto>()
+    {
 
-}
+    };
+
+    private class ExerciseDto
+    {
+        string Name { get; set; }
+
+    }
