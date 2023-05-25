@@ -4,7 +4,7 @@
 @inject IJSRuntime JSRuntime
 
 <input @bind="@_search" type="text" @oninput="SearchChanged" />
-<h6>results for @_search</h6>
+<h6>@_numMatches results for @_search</h6>
 
 <ul>
     @foreach (var ex in _filtered)
@@ -21,6 +21,7 @@
     private static List<Exercise> EMPTY_LIST = new List<Exercise>();
     private List<Exercise> _filtered = EMPTY_LIST;
     private string _search = string.Empty;
+    private int _numMatches = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,8 +32,20 @@
     {
         _search = args!.Value!.ToString()!;
 
-        _filtered = string.IsNullOrEmpty(_search) ? 
-            EMPTY_LIST : _allExercises.Where(e => e.Name.Contains(_search)).ToList();
+        if (string.IsNullOrEmpty(_search))
+        {
+            _filtered = EMPTY_LIST;
+            _numMatches = 0;
+            StateHasChanged();
+            return;
+        }
+
+        var filteredEnumerable = _allExercises
+                .Where(e => e.Name.Contains(_search));
+
+        _numMatches = filteredEnumerable.Count();
+        _filtered = filteredEnumerable.Take(10).ToList();
+
         StateHasChanged();
     }
 }
