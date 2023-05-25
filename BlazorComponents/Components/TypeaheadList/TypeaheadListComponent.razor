@@ -10,7 +10,6 @@
     @foreach (var ex in _filtered)
     {
         <li>
-            @ex.Key.Name @ex.Value.Item1 - @ex.Value.Item2
             @for(var i=0; i<ex.Key.Name.Length; i++)
             {
                 if(i >= ex.Value.Item1 && i < ex.Value.Item2)
@@ -61,8 +60,8 @@
         var filteredNotBegins = filteredEnumerable.Where(e => !e.Name.StartsWith(_search)).OrderBy(e => e.Name);
         var filteredOrdered = filteredBegins.Concat(filteredNotBegins).Take(10);
 
-        filteredOrdered.ToDictionary(e => e.Name, e => (e.Name.IndexOf(_search), e.Name.IndexOf(_search) + _search.Length));
-
+        _filtered = filteredOrdered.ToDictionary(e => e, e => (e.Name.IndexOf(_search), e.Name.IndexOf(_search) + _search.Length));
+        
         StateHasChanged();
     }
 }

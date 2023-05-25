@@ -18,8 +18,5 @@ public class ExerciseService
         var jsonContent = await _http.GetStringAsync("/sample-data/exercises.json");
         var exercises = JsonSerializer.Deserialize<List<Exercise>>(jsonContent) ?? throw new Exception();
         Exercises = exercises;
-        Exercises.ForEach(exercise => { 
-            Console.WriteLine(exercise.Name);
-        });
     }
 }
