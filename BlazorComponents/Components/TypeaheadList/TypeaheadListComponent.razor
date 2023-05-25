@@ -1,11 +1,24 @@
 ﻿@using BlazorComponents.WASM.Data.Models;
+@using BlazorComponents.WASM.Data.Services;
 @using BlazorComponents.WASM.Data.Static;
 @inject ExerciseService _exerciseService;
 <h3>TypeaheadListComponent</h3>
 
-@code {
-    private List<Exercise> exercises => _
+<ul>
+    @foreach (var ex in exercises)
     {
+        <li>
+            @ex.Name @ex.MuscleGroups.Count
+        </li>
+    }
+</ul>
 
-    };
 
+@code {
+    private List<Exercise> exercises => _exerciseService.Exercises;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _exerciseService.Load();
+    }
+}
