@@ -1,11 +1,15 @@
 ﻿using BlazorComponents.WASM.Data.Models;
+using System.Text.Json;
 
 namespace BlazorComponents.WASM.Data.Static;
 
-public static class ExerciseSamples
+public class ExerciseSamples
 {
-    public static List<Exercise> ChestExercises = new List<Exercise>()
+    public List<Exercise> Exercises = new List<Exercise>();
+    public ExerciseSamples()
     {
-        new(){}
+        string jsonContent = File.ReadAllText(filePath);
+        List<Exercise> exercises = JsonSerializer.Deserialize<List<Exercise>>(jsonContent);
+        return exercises;
     }
 }

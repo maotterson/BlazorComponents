@@ -81,11 +81,11 @@
   },
   {
     "name": "deadlifts",
-    "muscle-groups": [ "hamstrings", "glutes", "spinal erectors", "trapezius" ]
+    "muscle-groups": [ "hamstrings", "glutes", "spinal-erectors", "trapezius" ]
   },
   {
     "name": "romanian deadlifts",
-    "muscle-groups": [ "hamstrings", "glutes", "spinal erectors", "trapezius" ]
+    "muscle-groups": [ "hamstrings", "glutes", "spinal-erectors", "trapezius" ]
   },
   {
     "name": "leg curls",
@@ -145,7 +145,7 @@
   },
   {
     "name": "barbell rows",
-    "muscle-groups": [ "lats", "spinal erectors" ]
+    "muscle-groups": [ "lats", "spinal-erectors" ]
   },
   {
     "name": "dumbbell rows",
@@ -153,6 +153,6 @@
   },
   {
     "name": "good mornings",
-    "muscle-groups": ["hamstrings", "spinal erectors", "glutes"]
+    "muscle-groups": ["hamstrings", "spinal-erectors", "glutes"]
   }
 ]
