@@ -7,7 +7,7 @@
 
 @foreach (var ex in _filtered)
 {
-    <div class="card mb-3">
+    <div class="mb-3">
         <div class="card-body">
             <h5 class="card-title">
                 @for (var i = 0; i < ex.Key.Name.Length; i++)
@@ -34,6 +34,8 @@
 
 
 @code {
+    [Parameter]
+    public bool ShowAllByDefault { get; set; } = true;
     private List<Exercise> _allExercises => _exerciseService.Exercises;
     private static Dictionary<Exercise, (int, int)> EMPTY_SEARCH_TABLE = new Dictionary<Exercise, (int, int)>();
     private Dictionary<Exercise, (int, int)> _filtered = EMPTY_SEARCH_TABLE;
@@ -43,13 +45,14 @@
     protected override async Task OnInitializedAsync()
     {
         await _exerciseService.Load();
+        if (ShowAllByDefault) SearchChanged(new() { Value = "" });
     }
 
     private void SearchChanged(ChangeEventArgs args)
     {
         _search = args!.Value!.ToString()!;
 
-        if (string.IsNullOrEmpty(_search))
+        if (string.IsNullOrEmpty(_search) && ShowAllByDefault == false)
         {
             _filtered = EMPTY_SEARCH_TABLE;
             _numMatches = 0;
