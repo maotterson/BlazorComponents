@@ -3,34 +3,33 @@
 @inject ExerciseService _exerciseService;
 @inject IJSRuntime JSRuntime
 
-<input @bind="@_search" type="text" @oninput="SearchChanged" />
-<h6>@_numMatches results for @_search</h6>
+<input class="form-control" @bind="@_search" type="text" @oninput="SearchChanged" />
 
 @foreach (var ex in _filtered)
 {
-<div class="card" style="width: 18rem;">
-    <div class="card-body">
-    <h5 class="card-title">
-        @for (var i = 0; i < ex.Key.Name.Length; i++)
-        {
-            if (i >= ex.Value.Item1 && i < ex.Value.Item2)
-            {
-                <b>@ex.Key.Name[i]</b>
-            }
-            else
-            {
-                @ex.Key.Name[i]
-            }
-        }
-    </h5>
-    <h6 class="card-subtitle mb-2 text-body-secondary">
-        @foreach(var bg in ex.Key.MuscleGroups)
-        {
-            <span class="badge rounded-pill text-bg-success">@bg</span>
-        }
-    </h6>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">
+                @for (var i = 0; i < ex.Key.Name.Length; i++)
+                {
+                    if (i >= ex.Value.Item1 && i < ex.Value.Item2)
+                    {
+                        <b>@ex.Key.Name[i]</b>
+                    }
+                    else
+                    {
+                        @ex.Key.Name[i]
+                    }
+                }
+            </h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">
+                @foreach(var bg in ex.Key.MuscleGroups)
+                {
+                    <span class="badge rounded-pill text-bg-success">@bg</span>
+                }
+            </h6>
+        </div>
     </div>
-</div>
 }
 
 
