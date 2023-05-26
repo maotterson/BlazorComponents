@@ -3,12 +3,12 @@
 @inject ExerciseService _exerciseService;
 @inject IJSRuntime JSRuntime
 
-<input class="form-control" @bind="@_search" type="text" @oninput="SearchChanged" />
+<input class="form-control mb-3" @bind="@_search" type="text" @oninput="SearchChanged"/>
 
 @foreach (var ex in _filtered)
 {
-    <div class="mb-3">
-        <div class="card-body">
+    <div>
+        <div class="card-body border-bottom py-2">
             <h5 class="card-title">
                 @for (var i = 0; i < ex.Key.Name.Length; i++)
                 {
@@ -22,10 +22,10 @@
                     }
                 }
             </h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">
+            <h6 class="card-subtitle my-1 text-body-secondary">
                 @foreach(var bg in ex.Key.MuscleGroups)
                 {
-                    <span class="badge rounded-pill text-bg-success">@bg</span>
+                    <span class="badge text-bg-success me-2">@bg</span>
                 }
             </h6>
         </div>
@@ -36,6 +36,7 @@
 @code {
     [Parameter]
     public bool ShowAllByDefault { get; set; } = true;
+
     private List<Exercise> _allExercises => _exerciseService.Exercises;
     private static Dictionary<Exercise, (int, int)> EMPTY_SEARCH_TABLE = new Dictionary<Exercise, (int, int)>();
     private Dictionary<Exercise, (int, int)> _filtered = EMPTY_SEARCH_TABLE;
