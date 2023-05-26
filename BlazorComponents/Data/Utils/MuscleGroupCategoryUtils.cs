@@ -23,4 +23,13 @@ public static class MuscleGroupCategoryUtils
     {
         Pectorals, Abdominals, Obliques, SpinalErectors, Deltoids, Trapezius, Lats, Biceps, Triceps, HipFlexors, Calves, Quadriceps, Hamstrings, Glutes
     };
+
+    public static List<MuscleGroup> GetMuscleGroupsFromSlugs(List<string> slugs)
+    {
+        List<MuscleGroup> matches = MUSCLE_GROUP_LIST
+            .Where(mg => slugs.Contains(mg.Slug))
+            .ToList();
+
+        return matches;
+    }
 }

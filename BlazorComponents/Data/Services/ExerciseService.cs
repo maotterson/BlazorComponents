@@ -1,4 +1,5 @@
 ﻿using BlazorComponents.WASM.Data.Models;
+using BlazorComponents.WASM.Data.Utils;
 using System.Net.Http;
 using System.Text.Json;
 
@@ -16,7 +17,13 @@ public class ExerciseService
     public async Task Load()
     {
         var jsonContent = await _http.GetStringAsync("/sample-data/exercises.json");
-        var exercises = JsonSerializer.Deserialize<List<Exercise>>(jsonContent) ?? throw new Exception();
-        Exercises = exercises;
+        var exerciseDtos = JsonSerializer.Deserialize<List<ExerciseDto>>(jsonContent) ?? throw new Exception();
+
+        // todo: turn exercise dtos into exercises using the preloaded muscle groups
+        Exercises = exerciseDtos.Select(edto =>
+        {
+            var exercise = new Exercise { Name = edto.ExerciseName, MuscleGroups = MuscleGroupCategoryUtils.GetMuscleGroupsFromSlugs(edto.MuscleGroupSlugs) };
+            return exercise;
+        }).ToList();
     }
 }
