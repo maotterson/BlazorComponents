@@ -7,7 +7,7 @@ public static class MuscleGroupCategoryUtils
     public static MuscleGroup Pectorals = new MuscleGroup { Name = "Pectorals", Slug = "pectorals", MuscleGroupCategory = MuscleGroupCategory.Chest };
     public static MuscleGroup Abdominals = new MuscleGroup { Name = "Abdominals", Slug = "abdominals", MuscleGroupCategory = MuscleGroupCategory.Core };
     public static MuscleGroup Obliques = new MuscleGroup { Name = "Obliques", Slug = "obliques", MuscleGroupCategory = MuscleGroupCategory.Core };
-    public static MuscleGroup SpinalErectors = new MuscleGroup { Name = "SpinalErectors", Slug = "spinal-erectors", MuscleGroupCategory = MuscleGroupCategory.Back };
+    public static MuscleGroup SpinalErectors = new MuscleGroup { Name = "Spinal Erectors", Slug = "spinal-erectors", MuscleGroupCategory = MuscleGroupCategory.Back };
     public static MuscleGroup Deltoids = new MuscleGroup { Name = "Deltoids", Slug = "deltoids", MuscleGroupCategory = MuscleGroupCategory.Shoulders };
     public static MuscleGroup Trapezius = new MuscleGroup { Name = "Trapezius", Slug = "trapezius", MuscleGroupCategory = MuscleGroupCategory.Shoulders };
     public static MuscleGroup Lats = new MuscleGroup { Name = "Lats", Slug = "lats", MuscleGroupCategory = MuscleGroupCategory.Back };
