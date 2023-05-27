@@ -9,9 +9,8 @@
 
 @foreach (var item in _filtered)
 {
-    <TypeaheadListItemComponent ExerciseSearchResultItem="item"></TypeaheadListItemComponent>
+    <TypeaheadListItemComponent ExerciseSearchResultItem="item" OnClickCallback="ClickedListItem"></TypeaheadListItemComponent>
 }
-
 
 @code {
     [Parameter]
@@ -27,6 +26,11 @@
     {
         await _exerciseService.Load();
         if (ShowAllByDefault) SearchChanged(new() { Value = "" });
+    }
+
+    private void ClickedListItem(Exercise ex)
+    {
+        Console.WriteLine(ex.Name + " to parent component");
     }
 
     private void SearchChanged(ChangeEventArgs args)

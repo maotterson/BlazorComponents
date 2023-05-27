@@ -1,6 +1,7 @@
 ﻿@using BlazorComponents.WASM.Components.TypeaheadList.Models;
+@using BlazorComponents.WASM.Data.Models;
 <div>
-    <div class="card-body border-bottom py-2">
+    <div class="card-body border-bottom py-2" @onclick="ClickedListItem">
         <h5 class="card-title">
             @{
                 var containsMatch = ExerciseSearchResultItem.MatchingSubstrings.TryDequeue(out var matchingSubstring);
@@ -30,4 +31,11 @@
 @code {
     [Parameter]
     public ExerciseSearchResultItem ExerciseSearchResultItem { get; set; } = default!;
+    [Parameter]
+    public EventCallback<Exercise> OnClickCallback { get; set; }
+
+    public async Task ClickedListItem()
+    {
+        await OnClickCallback.InvokeAsync(ExerciseSearchResultItem.Exercise);
+    }
 }
