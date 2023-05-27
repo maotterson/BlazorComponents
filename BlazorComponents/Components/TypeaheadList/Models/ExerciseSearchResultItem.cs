@@ -2,7 +2,7 @@
 
 namespace BlazorComponents.WASM.Components.TypeaheadList.Models;
 
-public class ExerciseSearchResult
+public class ExerciseSearchResultItem
 {
     public Exercise Exercise { get; set; } = default!;
     public Queue<ExerciseSearchMatchingSubstring> MatchingSubstrings { get; set; } = default!;

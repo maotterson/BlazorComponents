@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.33711.374
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorComponents.WASM", "BlazorComponents\BlazorComponents.WASM.csproj", "{EEB1770E-1D3A-4EB3-B696-A20E32AFC35A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorComponents.WASM", "BlazorComponents\BlazorComponents.WASM.csproj", "{EEB1770E-1D3A-4EB3-B696-A20E32AFC35A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorComponents.MAUI", "BlazorComponents.MAUI\BlazorComponents.MAUI.csproj", "{E0DE2E57-3E1E-4B5D-A61C-9A531080F1C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorComponents.MAUI", "BlazorComponents.MAUI\BlazorComponents.MAUI.csproj", "{E0DE2E57-3E1E-4B5D-A61C-9A531080F1C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

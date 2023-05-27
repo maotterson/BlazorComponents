@@ -7,35 +7,9 @@
 
 <input class="form-control mb-3" @bind="@_search" type="text" @oninput="SearchChanged"/>
 
-@foreach (var er in _filtered)
+@foreach (var item in _filtered)
 {
-    <div>
-        <div class="card-body border-bottom py-2">
-            <h5 class="card-title">
-                @{
-                    var containsMatch = er.MatchingSubstrings.TryDequeue(out var matchingSubstring);
-                    for (var i = 0; i < er.Exercise.Name.Length; i++)
-                    {
-                        if (containsMatch && i == matchingSubstring!.EndingIndex) containsMatch = er.MatchingSubstrings.TryDequeue(out matchingSubstring);
-                        if (containsMatch && i >= matchingSubstring!.StartingIndex && i < matchingSubstring!.EndingIndex)
-                        {
-                            <b>@er.Exercise.Name[i]</b>
-                        }
-                        else
-                        {
-                            @er.Exercise.Name[i]
-                        }
-                    }
-                }
-            </h5>
-            <h6 class="card-subtitle my-1 text-body-secondary">
-                @foreach(var bg in er.Exercise.MuscleGroups)
-                {
-                    <span class="badge text-bg-success me-2">@bg.Name</span>
-                }
-            </h6>
-        </div>
-    </div>
+    <TypeaheadListItemComponent ExerciseSearchResultItem="item"></TypeaheadListItemComponent>
 }
 
 
@@ -44,8 +18,8 @@
     public bool ShowAllByDefault { get; set; } = true;
 
     private List<Exercise> _allExercises => _exerciseService.Exercises;
-    private static List<ExerciseSearchResult> EMPTY_SEARCH_RESULTS = new List<ExerciseSearchResult>();
-    private List<ExerciseSearchResult> _filtered = EMPTY_SEARCH_RESULTS;
+    private static List<ExerciseSearchResultItem> EMPTY_SEARCH_RESULTS = new List<ExerciseSearchResultItem>();
+    private List<ExerciseSearchResultItem> _filtered = EMPTY_SEARCH_RESULTS;
     private string _search = string.Empty;
     private int _numMatches = 0;
 
@@ -77,7 +51,7 @@
         var filteredOrdered = filteredBegins.Concat(filteredNotBegins).Take(10);
         _filtered = filteredOrdered.Select(e => {
             Console.WriteLine(e.Name);
-            var item = new ExerciseSearchResult
+            var item = new ExerciseSearchResultItem
             {
                 Exercise = e,
                 MatchingSubstrings = ExerciseSearchUtils.GetMatchingSubstrings(e.Name, _search)
