@@ -1,4 +1,5 @@
-﻿@using BlazorComponents.WASM.Data.Models;
+﻿@using BlazorComponents.WASM.Components.TypeaheadList.Models;
+@using BlazorComponents.WASM.Data.Models;
 @using BlazorComponents.WASM.Data.Services;
 @inject ExerciseService _exerciseService;
 @inject IJSRuntime JSRuntime
@@ -69,6 +70,13 @@
         var filteredBegins = filteredEnumerable.Where(e => e.Name.StartsWith(_search)).OrderBy(e => e.Name);
         var filteredNotBegins = filteredEnumerable.Where(e => !e.Name.StartsWith(_search)).OrderBy(e => e.Name);
         var filteredOrdered = filteredBegins.Concat(filteredNotBegins).Take(10);
+        var _filtered2 = filteredOrdered.Select(e =>
+        {
+        new ExerciseSearchResult
+            {
+                Exercise = e,
+                MatchedSearchIndices = new List<(int, int)>() { (e.Name.IndexOf(_search), e.Name.IndexOf(_search) + _search.Length)}
+        });
 
         _filtered = filteredOrdered.ToDictionary(e => e, e => (e.Name.IndexOf(_search), e.Name.IndexOf(_search) + _search.Length));
         
