@@ -10,6 +10,11 @@ public static class ExerciseSearchUtils
         int index = 0;
         int substringLength = substring.Length;
 
+        if(substring.Length == 0)
+        {
+            return matchingSubstrings;
+        }
+
         while (index < parentString.Length)
         {
             index = parentString.IndexOf(substring, index, StringComparison.OrdinalIgnoreCase);
@@ -19,7 +24,7 @@ public static class ExerciseSearchUtils
             matchingSubstrings.Add(new ExerciseSearchMatchingSubstring
             {
                 StartingIndex = index,
-                EndingIndex = index + substringLength - 1
+                EndingIndex = index + substringLength
             });
 
             index += substringLength;

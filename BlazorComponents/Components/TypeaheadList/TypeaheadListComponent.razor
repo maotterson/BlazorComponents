@@ -1,4 +1,5 @@
 ﻿@using BlazorComponents.WASM.Components.TypeaheadList.Models;
+@using BlazorComponents.WASM.Components.TypeaheadList.Utils;
 @using BlazorComponents.WASM.Data.Models;
 @using BlazorComponents.WASM.Data.Services;
 @inject ExerciseService _exerciseService;
@@ -6,25 +7,29 @@
 
 <input class="form-control mb-3" @bind="@_search" type="text" @oninput="SearchChanged"/>
 
-@foreach (var ex in _filtered)
+@foreach (var er in _filtered)
 {
     <div>
         <div class="card-body border-bottom py-2">
             <h5 class="card-title">
-                @for (var i = 0; i < ex.Key.Name.Length; i++)
-                {
-                    if (i >= ex.Value.Item1 && i < ex.Value.Item2)
+                @{
+                    var currentMatch = 0;
+                    for (var i = 0; i < er.Exercise.Name.Length; i++)
                     {
-                        <b>@ex.Key.Name[i]</b>
-                    }
-                    else
-                    {
-                        @ex.Key.Name[i]
+                        if (i == er.MatchingSubstrings[currentMatch].EndingIndex) currentMatch++;
+                        if (i >= er.MatchingSubstrings[currentMatch].StartingIndex && i < er.MatchingSubstrings[currentMatch].EndingIndex)
+                        {
+                            <b>@er.Exercise.Name[i]</b>
+                        }
+                        else
+                        {
+                            @er.Exercise.Name[i]
+                        }
                     }
                 }
             </h5>
             <h6 class="card-subtitle my-1 text-body-secondary">
-                @foreach(var bg in ex.Key.MuscleGroups)
+                @foreach(var bg in er.Exercise.MuscleGroups)
                 {
                     <span class="badge text-bg-success me-2">@bg.Name</span>
                 }
@@ -39,8 +44,8 @@
     public bool ShowAllByDefault { get; set; } = true;
 
     private List<Exercise> _allExercises => _exerciseService.Exercises;
-    private static Dictionary<Exercise, (int, int)> EMPTY_SEARCH_TABLE = new Dictionary<Exercise, (int, int)>();
-    private Dictionary<Exercise, (int, int)> _filtered = EMPTY_SEARCH_TABLE;
+    private static List<ExerciseSearchResult> EMPTY_SEARCH_RESULTS = new List<ExerciseSearchResult>();
+    private List<ExerciseSearchResult> _filtered = EMPTY_SEARCH_RESULTS;
     private string _search = string.Empty;
     private int _numMatches = 0;
 
@@ -56,7 +61,7 @@
 
         if (string.IsNullOrEmpty(_search) && ShowAllByDefault == false)
         {
-            _filtered = EMPTY_SEARCH_TABLE;
+            _filtered = EMPTY_SEARCH_RESULTS;
             _numMatches = 0;
             StateHasChanged();
             return;
@@ -70,16 +75,15 @@
         var filteredBegins = filteredEnumerable.Where(e => e.Name.StartsWith(_search)).OrderBy(e => e.Name);
         var filteredNotBegins = filteredEnumerable.Where(e => !e.Name.StartsWith(_search)).OrderBy(e => e.Name);
         var filteredOrdered = filteredBegins.Concat(filteredNotBegins).Take(10);
-        var _filtered2 = filteredOrdered.Select(e =>
-        {
-        new ExerciseSearchResult
+        _filtered = filteredOrdered.Select(e => {
+            Console.WriteLine(e.Name);
+            return new ExerciseSearchResult
             {
                 Exercise = e,
-                MatchedSearchIndices = new List<(int, int)>() { (e.Name.IndexOf(_search), e.Name.IndexOf(_search) + _search.Length)}
-        });
+                MatchingSubstrings = ExerciseSearchUtils.GetMatchingSubstrings(e.Name, _search)
+            };
+        }).ToList();
 
-        _filtered = filteredOrdered.ToDictionary(e => e, e => (e.Name.IndexOf(_search), e.Name.IndexOf(_search) + _search.Length));
-        
         StateHasChanged();
     }
 }
