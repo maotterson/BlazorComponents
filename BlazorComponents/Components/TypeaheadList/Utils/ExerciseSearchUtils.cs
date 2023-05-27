@@ -4,13 +4,13 @@ namespace BlazorComponents.WASM.Components.TypeaheadList.Utils;
 
 public static class ExerciseSearchUtils
 {
-    public static List<ExerciseSearchMatchingSubstring> GetMatchingSubstrings(string parentString, string substring)
+    public static Queue<ExerciseSearchMatchingSubstring> GetMatchingSubstrings(string parentString, string substring)
     {
-        List<ExerciseSearchMatchingSubstring> matchingSubstrings = new List<ExerciseSearchMatchingSubstring>();
+        Queue<ExerciseSearchMatchingSubstring> matchingSubstrings = new Queue<ExerciseSearchMatchingSubstring>();
         int index = 0;
         int substringLength = substring.Length;
 
-        if(substring.Length == 0)
+        if (substringLength == 0)
         {
             return matchingSubstrings;
         }
@@ -21,7 +21,7 @@ public static class ExerciseSearchUtils
             if (index == -1)
                 break;
 
-            matchingSubstrings.Add(new ExerciseSearchMatchingSubstring
+            matchingSubstrings.Enqueue(new ExerciseSearchMatchingSubstring
             {
                 StartingIndex = index,
                 EndingIndex = index + substringLength

@@ -13,11 +13,11 @@
         <div class="card-body border-bottom py-2">
             <h5 class="card-title">
                 @{
-                    var currentMatch = 0;
+                    var containsMatch = er.MatchingSubstrings.TryDequeue(out var matchingSubstring);
                     for (var i = 0; i < er.Exercise.Name.Length; i++)
                     {
-                        if (i == er.MatchingSubstrings[currentMatch].EndingIndex) currentMatch++;
-                        if (i >= er.MatchingSubstrings[currentMatch].StartingIndex && i < er.MatchingSubstrings[currentMatch].EndingIndex)
+                        if (containsMatch && i == matchingSubstring!.EndingIndex) containsMatch = er.MatchingSubstrings.TryDequeue(out matchingSubstring);
+                        if (containsMatch && i >= matchingSubstring!.StartingIndex && i < matchingSubstring!.EndingIndex)
                         {
                             <b>@er.Exercise.Name[i]</b>
                         }
@@ -77,11 +77,12 @@
         var filteredOrdered = filteredBegins.Concat(filteredNotBegins).Take(10);
         _filtered = filteredOrdered.Select(e => {
             Console.WriteLine(e.Name);
-            return new ExerciseSearchResult
+            var item = new ExerciseSearchResult
             {
                 Exercise = e,
                 MatchingSubstrings = ExerciseSearchUtils.GetMatchingSubstrings(e.Name, _search)
-            };
+                };
+            return item;
         }).ToList();
 
         StateHasChanged();
